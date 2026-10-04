@@ -62,14 +62,39 @@ p{margin:0}
 .rule{height:1px;background:linear-gradient(90deg,var(--line-2),transparent);margin-block:clamp(8px,2vw,22px)}
 .note{font-size:14px;color:var(--muted)}
 
-/* фон и пар */
-.atmos{position:fixed;inset:0;z-index:-2;pointer-events:none;
+/* фон: жар → холод (как печь) */
+.atmos{position:fixed;inset:0;z-index:-2;pointer-events:none}
+.atmos__hot,.atmos__cold{position:absolute;inset:0;transition:opacity .35s linear}
+.atmos__hot{
   background:
-    radial-gradient(85% 55% at 50% -6%, rgba(224,162,75,.24), transparent 60%),
-    radial-gradient(70% 60% at 90% 110%, rgba(157,185,138,.10), transparent 60%),
+    radial-gradient(90% 55% at 50% -8%, rgba(224,162,75,.30), transparent 62%),
+    radial-gradient(60% 45% at 88% 16%, rgba(198,127,44,.14), transparent 60%),
     linear-gradient(180deg,#150E08,#0E0906);
 }
+.atmos__cold{
+  opacity:0;
+  background:
+    radial-gradient(90% 55% at 50% 108%, rgba(99,189,178,.22), transparent 64%),
+    linear-gradient(180deg,#0A0C0B,#07100F);
+}
 .steam{position:fixed;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:.55}
+.embers{position:fixed;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
+
+/* ------------------------------- ТЕРМОМЕТР ------------------------------- */
+.thermo{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:40;
+  display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;user-select:none}
+.thermo__read{font-variant-numeric:tabular-nums;font-weight:600;font-size:13px;color:var(--fg);
+  background:rgba(18,12,7,.62);border:1px solid var(--line);padding:3px 9px;border-radius:999px;
+  backdrop-filter:blur(6px);min-width:56px;text-align:center}
+.thermo__body{display:flex;align-items:stretch;gap:8px}
+.thermo__ticks{display:flex;flex-direction:column;justify-content:space-between;height:240px;
+  font-size:10px;letter-spacing:.02em;color:var(--muted);font-variant-numeric:tabular-nums}
+.thermo__tube{position:relative;width:8px;height:240px;border-radius:999px;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);overflow:hidden}
+.thermo__mercury{position:absolute;left:0;right:0;bottom:0;height:100%;border-radius:999px;
+  background:var(--amber);transition:background .2s linear}
+.thermo__bulb{width:18px;height:18px;margin-top:-7px;border-radius:50%;background:var(--amber);
+  border:1px solid var(--line);box-shadow:0 0 16px rgba(224,162,75,.5);transition:background .2s linear}
 
 /* кнопки */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
@@ -111,9 +136,14 @@ p{margin:0}
 .hero h1 em{font-style:normal;color:var(--amber)}
 .hero .lead{margin-top:22px;font-size:clamp(1rem,1.4vw,1.18rem);max-width:50ch}
 .hero__cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;align-items:center}
-.hero__chip{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--line-2);border-radius:999px;
-  padding:9px 18px;color:var(--fg-2);font-size:14.5px}
-.hero__chip b{font-family:"Cormorant Garamond",serif;font-size:1.35rem;color:var(--amber);font-weight:700}
+.hero__hint{color:var(--fg-2);font-size:14px;opacity:.85}
+.hero__price{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.hprice{border:1px solid var(--line-2);border-radius:14px;padding:12px 18px;min-width:172px;
+  background:rgba(18,12,7,.46);backdrop-filter:blur(8px)}
+.hprice b{display:block;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:1.8rem;color:var(--amber);line-height:1}
+.hprice small{display:block;margin-top:4px;font-size:13px;color:var(--fg-2)}
+.hprice--best{border-color:var(--amber);background:linear-gradient(180deg,rgba(224,162,75,.16),rgba(18,12,7,.46))}
+.hprice--best b{color:var(--amber-3)}
 
 /* секции */
 .sec{padding-block:clamp(60px,9vw,124px);scroll-margin-top:var(--nav-h)}
@@ -221,6 +251,25 @@ p{margin:0}
 .foot__in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .foot a:hover{color:var(--fg)}
 
+/* появление при прокрутке */
+[data-reveal]{opacity:0;transform:translateY(26px);
+  transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1)}
+[data-reveal].is-in{opacity:1;transform:none}
+
+/* вход главного экрана */
+.hero__in > *{opacity:0;transform:translateY(22px);animation:heroIn .9s cubic-bezier(.2,.7,.3,1) forwards}
+.hero__in > *:nth-child(1){animation-delay:.08s}
+.hero__in > *:nth-child(2){animation-delay:.16s}
+.hero__in > *:nth-child(3){animation-delay:.26s}
+.hero__in > *:nth-child(4){animation-delay:.38s}
+.hero__in > *:nth-child(5){animation-delay:.5s}
+.hero__in > *:nth-child(6){animation-delay:.6s}
+@keyframes heroIn{to{opacity:1;transform:none}}
+
+/* мягкое свечение главной кнопки */
+@keyframes glow{0%,100%{box-shadow:0 0 14px rgba(224,162,75,.30)}50%{box-shadow:0 0 26px rgba(224,162,75,.62)}}
+.btn--amber{animation:glow 3.6s ease-in-out infinite}
+
 /* адаптив */
 @media (max-width:1040px){
   .facts{grid-template-columns:1fr 1fr}
@@ -246,18 +295,41 @@ p{margin:0}
   .carousel__viewport{aspect-ratio:3/4}
   .carousel__btn{width:40px;height:40px}
   .hero h1{max-width:none}
+  .thermo{right:6px}
+  .thermo__ticks{display:none}
+  .thermo__tube{height:150px;width:6px}
+  .thermo__read{font-size:11px;min-width:46px;padding:2px 7px}
+  .thermo__bulb{width:14px;height:14px}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important;scroll-behavior:auto}
-  .btn:hover,.price-card:hover{transform:none}
+  .btn:hover,.price-card:hover,.amen__card:hover{transform:none}
   .carousel__track{transition:none}
+  .hero__in > *{opacity:1;transform:none}
+  [data-reveal]{opacity:1;transform:none}
 }
 </style>
 </head>
 <body>
 
-<div class="atmos" aria-hidden="true"></div>
+<div class="atmos" aria-hidden="true">
+  <div class="atmos__hot" id="atmosHot"></div>
+  <div class="atmos__cold" id="atmosCold"></div>
+</div>
 <canvas class="steam" id="steam" aria-hidden="true"></canvas>
+<canvas class="embers" id="embers" aria-hidden="true"></canvas>
+
+<!-- термометр жара -->
+<aside class="thermo" id="thermo" aria-hidden="true">
+  <span class="thermo__read" id="thermoRead">+90°</span>
+  <div class="thermo__body">
+    <div class="thermo__ticks">
+      <span>+90</span><span>+60</span><span>+30</span><span>0</span><span>−5</span>
+    </div>
+    <div class="thermo__tube"><div class="thermo__mercury" id="mercury"></div></div>
+  </div>
+  <div class="thermo__bulb" id="bulb"></div>
+</aside>
 
 <header class="header">
   <div class="wrap header__in">
@@ -304,9 +376,13 @@ p{margin:0}
       <div class="hero__cta">
         <a class="btn btn--amber" href="https://vk.com/club228036968" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8l-4 4V5a1 1 0 0 1 1-1Z"/></svg>
-          Забронировать в ВК
+          Записаться во ВКонтакте
         </a>
-        <span class="hero__chip"><b>1 500 ₽</b> / час · от 6 часов — 1 000 ₽</span>
+        <span class="hero__hint">Свободные вечера разбирают быстро — бронируйте заранее</span>
+      </div>
+      <div class="hero__price">
+        <div class="hprice"><b>1 500 ₽</b><small>за час аренды бани</small></div>
+        <div class="hprice hprice--best"><b>1 000 ₽</b><small>за час, если берёте от 6 часов</small></div>
       </div>
     </div>
   </section>
@@ -548,12 +624,55 @@ p{margin:0}
     });
   }
 
+  /* общие настройки */
+  var reduceAll = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  var heatVal = 1; /* 1 — жарко, 0 — прохладно */
+
+  /* жар/холод: атмосфера + термометр + лёгкий параллакс фона */
+  var hotEl = document.getElementById('atmosHot');
+  var coldEl = document.getElementById('atmosCold');
+  var mercury = document.getElementById('mercury');
+  var bulb = document.getElementById('bulb');
+  var read = document.getElementById('thermoRead');
+  var heroBg = document.querySelector('.hero__bg');
+  var HOT = [224,162,75], COLD = [99,189,178];
+  var T_TOP = 90, T_BOT = -5;
+  var ticking = false;
+
+  function mixColor(a, b, t){
+    return 'rgb(' + Math.round(a[0]+(b[0]-a[0])*t) + ',' +
+                    Math.round(a[1]+(b[1]-a[1])*t) + ',' +
+                    Math.round(a[2]+(b[2]-a[2])*t) + ')';
+  }
+  function update(){
+    ticking = false;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+
+    heatVal = 1 - p;
+    if (hotEl)  hotEl.style.opacity  = String(1 - p);
+    if (coldEl) coldEl.style.opacity = String(p);
+
+    var c = mixColor(HOT, COLD, p);
+    if (mercury){ mercury.style.height = ((1 - p) * 100) + '%'; mercury.style.background = c; mercury.style.boxShadow = '0 0 14px ' + c; }
+    if (bulb){ bulb.style.background = c; bulb.style.boxShadow = '0 0 16px ' + c; }
+    if (read){
+      var t = Math.round(T_TOP + (T_BOT - T_TOP) * p);
+      read.textContent = (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + '°';
+    }
+    if (heroBg && !reduceAll) heroBg.style.transform = 'translateY(' + (window.scrollY * 0.16) + 'px) scale(1.06)';
+  }
+  function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  update();
+
   /* лёгкий тёплый пар на фоне */
   var steam = document.getElementById('steam');
   if (steam && steam.getContext){
     var sctx = steam.getContext('2d');
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var dpr = Math.min(2, window.devicePixelRatio || 1);
     var sw = 0, sh = 0, parts = [], stime = 0, sprite = null;
 
     (function(){
@@ -597,14 +716,95 @@ p{margin:0}
         p.y += p.vy;
         p.x += Math.sin(stime * 0.0006 + p.seed) * p.sway + p.drift;
         if (p.y + p.r < 0){ parts[i] = mk(true); continue; }
-        sctx.globalAlpha = Math.max(0, p.a);
+        sctx.globalAlpha = Math.max(0, p.a * (0.35 + 0.65 * heatVal));
         sctx.drawImage(sprite, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
       }
       sctx.globalAlpha = 1;
-      if (!reduce) requestAnimationFrame(frame);
+      if (!reduceAll) requestAnimationFrame(frame);
     }
     resize(); frame();
-    window.addEventListener('resize', function(){ resize(); if (reduce) frame(); });
+    window.addEventListener('resize', function(){ resize(); if (reduceAll) frame(); });
+  }
+
+  /* тёплые искры — видны, пока «жарко» */
+  var embers = document.getElementById('embers');
+  if (embers && embers.getContext){
+    var ectx = embers.getContext('2d');
+    var ew = 0, eh = 0, eparts = [], etime = 0, esprite = null;
+
+    (function(){
+      var s = 64, c = document.createElement('canvas');
+      c.width = c.height = s;
+      var x = c.getContext('2d');
+      var g = x.createRadialGradient(s/2, s/2, 0, s/2, s/2, s/2);
+      g.addColorStop(0, 'rgba(255,216,150,0.95)');
+      g.addColorStop(0.4, 'rgba(224,162,75,0.35)');
+      g.addColorStop(1, 'rgba(224,162,75,0)');
+      x.fillStyle = g; x.fillRect(0, 0, s, s); esprite = c;
+    })();
+
+    function emk(bottom){
+      return {
+        x: Math.random() * ew,
+        y: bottom ? eh + Math.random() * eh * 0.4 : Math.random() * eh,
+        r: 1.6 + Math.random() * 3.4,
+        a: 0.35 + Math.random() * 0.5,
+        vy: -(0.25 + Math.random() * 0.8),
+        sway: 0.2 + Math.random() * 0.7,
+        drift: (Math.random() - 0.5) * 0.25,
+        seed: Math.random() * Math.PI * 2
+      };
+    }
+    function eresize(){
+      ew = embers.clientWidth; eh = embers.clientHeight;
+      embers.width = Math.max(1, Math.round(ew * dpr));
+      embers.height = Math.max(1, Math.round(eh * dpr));
+      ectx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(16, Math.min(56, Math.round(ew / 34)));
+      eparts = [];
+      for (var i = 0; i < n; i++) eparts.push(emk(false));
+    }
+    function eframe(){
+      etime += 16;
+      ectx.clearRect(0, 0, ew, eh);
+      ectx.globalCompositeOperation = 'lighter';
+      var k = 0.22 + 0.78 * heatVal;
+      for (var i = 0; i < eparts.length; i++){
+        var p = eparts[i];
+        p.y += p.vy;
+        p.x += Math.sin(etime * 0.001 + p.seed) * p.sway + p.drift;
+        if (p.y + p.r < 0){ eparts[i] = emk(true); continue; }
+        ectx.globalAlpha = Math.max(0, p.a * k);
+        ectx.drawImage(esprite, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+      }
+      ectx.globalAlpha = 1;
+      if (!reduceAll) requestAnimationFrame(eframe);
+    }
+    eresize(); eframe();
+    window.addEventListener('resize', function(){ eresize(); if (reduceAll) eframe(); });
+  }
+
+  /* появление блоков при прокрутке */
+  var revealEls = [].slice.call(document.querySelectorAll(
+    '.sec__head, .about > div, .about__photo, .amen__card, .price-card, .gift, .step, .contact > div, .contact__map, .carousel, .foot__in'
+  ));
+  if (revealEls.length){
+    if (!reduceAll && 'IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting){ en.target.classList.add('is-in'); io.unobserve(en.target); }
+        });
+      }, {threshold:.15, rootMargin:'0px 0px -8% 0px'});
+      revealEls.forEach(function(el, idx){
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.92){ el.classList.add('is-in'); return; }
+        el.setAttribute('data-reveal', '');
+        el.style.transitionDelay = ((idx % 4) * 0.07).toFixed(2) + 's';
+        io.observe(el);
+      });
+    } else {
+      revealEls.forEach(function(el){ el.classList.add('is-in'); });
+    }
   }
 
   /* карусель */
