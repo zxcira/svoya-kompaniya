@@ -675,6 +675,33 @@ p{margin:0}
     var sctx = steam.getContext('2d');
     var sw = 0, sh = 0, parts = [], stime = 0, sprite = null;
 
+    /* пар, который тянется за курсором */
+    var puffs = [], pLast = 0, pLastX = -999, pLastY = -999;
+    var ptr = { x: 0, y: 0, on: false };
+    window.addEventListener('mousemove', function(e){
+      ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
+    }, {passive:true});
+    window.addEventListener('mouseout', function(){ ptr.on = false; });
+    window.addEventListener('touchmove', function(e){
+      if (e.touches[0]){ ptr.x = e.touches[0].clientX; ptr.y = e.touches[0].clientY; ptr.on = true; }
+    }, {passive:true});
+    window.addEventListener('touchend', function(){ ptr.on = false; });
+
+    function pk(){
+      return {
+        x: ptr.x + (Math.random() - 0.5) * 22,
+        y: ptr.y + (Math.random() - 0.5) * 22,
+        r: 16 + Math.random() * 26,
+        grow: 0.5 + Math.random() * 0.9,
+        a: 0.14 + Math.random() * 0.16,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: -(0.25 + Math.random() * 0.5),
+        life: 0,
+        max: 700 + Math.random() * 900,
+        seed: Math.random() * Math.PI * 2
+      };
+    }
+
     (function(){
       var s = 160, c = document.createElement('canvas');
       c.width = c.height = s;
@@ -718,6 +745,28 @@ p{margin:0}
         if (p.y + p.r < 0){ parts[i] = mk(true); continue; }
         sctx.globalAlpha = Math.max(0, p.a * (0.35 + 0.65 * heatVal));
         sctx.drawImage(sprite, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+      }
+
+      /* струйка пара за курсором */
+      if (ptr.on && !reduceAll && stime - pLast > 22){
+        var mdx = ptr.x - pLastX, mdy = ptr.y - pLastY;
+        if (mdx * mdx + mdy * mdy > 9){
+          pLast = stime; pLastX = ptr.x; pLastY = ptr.y;
+          puffs.push(pk());
+          if (puffs.length > 80) puffs.shift();
+        }
+      }
+      var pheat = 0.45 + 0.55 * heatVal;
+      for (var j = 0; j < puffs.length; j++){
+        var q = puffs[j];
+        q.life += 16;
+        q.x += q.vx + Math.sin(stime * 0.001 + q.seed) * 0.25;
+        q.y += q.vy;
+        q.r += q.grow;
+        if (q.life >= q.max){ puffs.splice(j, 1); j--; continue; }
+        var f = Math.min(1, q.life / 220) * (1 - q.life / q.max);
+        sctx.globalAlpha = Math.max(0, q.a * f * pheat);
+        sctx.drawImage(sprite, q.x - q.r, q.y - q.r, q.r * 2, q.r * 2);
       }
       sctx.globalAlpha = 1;
       if (!reduceAll) requestAnimationFrame(frame);
