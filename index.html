@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Своя компания — баня в Снежинске · аренда от 1 500 ₽/час</title>
+<meta name="description" content="Баня «Своя компания» в Снежинске, ул. Транспортная, 28. Пар и жар для своей компании: 1 500 ₽/час, от 6 часов — 1 000 ₽/час. Бронь во ВКонтакте.">
+<meta name="theme-color" content="#120C07">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   «СВОЯ КОМПАНИЯ» — баня в Снежинске
+   Тёплый «кедровый» стиль: янтарь, дерево, пар.
+   ============================================================ */
+:root{
+  --bg:#120C07;
+  --surface:#1C140C;
+  --surface-2:#291D12;
+  --line:#38291A;
+  --line-2:#4C3820;
+
+  --fg:#F6EEE0;
+  --fg-2:#D6C6AE;
+  --muted:#A2917A;
+
+  --amber:#E0A24B;
+  --amber-2:#C67F2C;
+  --amber-3:#F0BB74;
+  --birch:#9DB98A;
+  --cream:#F3E4CB;
+
+  --maxw:1180px;
+  --gutter:clamp(18px,4vw,44px);
+  --r:16px;
+  --t:200ms cubic-bezier(.2,.7,.3,1);
+  --nav-h:68px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font-family:"Golos Text",system-ui,sans-serif;
+  font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,blockquote{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;line-height:1.08;margin:0}
+p{margin:0}
+::selection{background:var(--amber);color:#1A1006}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;font-weight:600}
+.lead{color:var(--fg-2);max-width:60ch}
+.rule{height:1px;background:linear-gradient(90deg,var(--line-2),transparent);margin-block:clamp(8px,2vw,22px)}
+.note{font-size:14px;color:var(--muted)}
+
+/* фон и пар */
+.atmos{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(85% 55% at 50% -6%, rgba(224,162,75,.24), transparent 60%),
+    radial-gradient(70% 60% at 90% 110%, rgba(157,185,138,.10), transparent 60%),
+    linear-gradient(180deg,#150E08,#0E0906);
+}
+.steam{position:fixed;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:.55}
+
+/* кнопки */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:52px;padding:0 26px;border-radius:999px;font-family:inherit;font-size:16px;font-weight:600;
+  cursor:pointer;border:1px solid transparent;transition:transform var(--t),background var(--t),border-color var(--t),color var(--t)}
+.btn svg{width:18px;height:18px;flex:none}
+.btn--amber{background:var(--amber);color:#1A1006}
+.btn--amber:hover{background:var(--amber-3);transform:translateY(-1px)}
+.btn--ghost{background:transparent;color:var(--fg);border-color:var(--line-2)}
+.btn--ghost:hover{border-color:var(--amber);color:#fff}
+
+/* шапка */
+.header{position:sticky;top:0;z-index:50;background:rgba(18,12,7,.74);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(224,162,75,.14)}
+.header__in{display:flex;align-items:center;gap:22px;min-height:var(--nav-h)}
+.logo{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.logo__mark{font-family:"Cormorant Garamond",serif;font-weight:700;font-size:27px;letter-spacing:.04em}
+.logo__sub{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber)}
+.nav{display:flex;gap:22px;font-size:15px}
+.nav a{color:var(--fg-2);transition:color var(--t)}
+.nav a:hover{color:#fff}
+.header .btn{min-height:44px;padding:0 20px;font-size:15px}
+.burger{display:none;width:46px;height:46px;border:1px solid var(--line-2);background:transparent;border-radius:12px;
+  color:var(--fg);cursor:pointer;align-items:center;justify-content:center}
+.burger svg{width:22px;height:22px}
+.mnav{position:fixed;left:0;right:0;top:var(--nav-h);z-index:49;background:#150E08;border-bottom:1px solid var(--line);
+  display:none;padding:12px var(--gutter) 20px}
+.mnav[data-open]{display:block}
+.mnav a{display:block;padding:14px 0;border-bottom:1px solid var(--line);font-size:18px}
+
+/* герой */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  overflow:hidden;isolation:isolate}
+.hero__bg{position:absolute;inset:0;z-index:-2;background:url("img/hero.jpg") center 30%/cover no-repeat;opacity:.55}
+.hero__veil{position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(18,12,7,.66) 0%,rgba(18,12,7,.28) 34%,rgba(18,12,7,.84) 74%,var(--bg) 100%)}
+.hero__in{position:relative;z-index:1;width:100%;padding-block:clamp(72px,12vw,140px) clamp(64px,10vw,120px)}
+.hero h1{font-size:clamp(2.9rem,8vw,6.3rem);letter-spacing:-.005em;margin-top:16px;max-width:15ch}
+.hero h1 em{font-style:normal;color:var(--amber)}
+.hero .lead{margin-top:22px;font-size:clamp(1rem,1.4vw,1.18rem);max-width:50ch}
+.hero__cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;align-items:center}
+.hero__chip{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--line-2);border-radius:999px;
+  padding:9px 18px;color:var(--fg-2);font-size:14.5px}
+.hero__chip b{font-family:"Cormorant Garamond",serif;font-size:1.35rem;color:var(--amber);font-weight:700}
+
+/* секции */
+.sec{padding-block:clamp(60px,9vw,124px);scroll-margin-top:var(--nav-h)}
+.sec--top{padding-top:clamp(48px,7vw,92px)}
+.sec__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:42px;flex-wrap:wrap}
+.sec__head h2{font-size:clamp(2rem,4.4vw,3.3rem)}
+
+/* о бане */
+.about{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(28px,5vw,68px);align-items:center}
+.about h2{font-size:clamp(2rem,4.4vw,3.3rem);margin-bottom:20px}
+.about blockquote{font-size:clamp(1.25rem,2vw,1.65rem);color:var(--fg);border-left:2px solid var(--amber);
+  padding-left:20px;margin:0}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+.fact{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:linear-gradient(180deg,var(--surface),transparent)}
+.fact b{display:block;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:2rem;color:var(--amber);line-height:1.1}
+.fact span{font-size:14px;color:var(--muted)}
+.about__photo{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);aspect-ratio:4/5}
+.about__photo img{width:100%;height:100%;object-fit:cover}
+.about__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(18,12,7,.6))}
+
+/* аренда / цены */
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.price-card{position:relative;border:1px solid var(--line);border-radius:20px;padding:32px 30px 34px;overflow:hidden;
+  background:linear-gradient(180deg,var(--surface),var(--bg));transition:border-color var(--t),transform var(--t)}
+.price-card:hover{border-color:var(--amber);transform:translateY(-3px)}
+.price-card--best{background:radial-gradient(80% 100% at 12% 0%,rgba(224,162,75,.18),transparent 62%),linear-gradient(180deg,var(--surface),var(--bg))}
+.price-card__tag{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:600}
+.price-card h3{font-size:1.7rem;margin:10px 0 6px}
+.price-card__val{font-family:"Cormorant Garamond",serif;font-weight:700;font-size:2.6rem;color:var(--amber);line-height:1}
+.price-card__val small{font-family:"Golos Text";font-size:15px;font-weight:400;color:var(--muted)}
+.price-card p{color:var(--fg-2);font-size:15.5px;margin-top:14px}
+
+/* галерея-карусель */
+.carousel{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#0f0a06;touch-action:pan-y}
+.carousel__viewport{position:relative;aspect-ratio:4/5;overflow:hidden;max-height:78vh;margin:0 auto}
+.carousel__viewport::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.18) 0%,transparent 22%,transparent 74%,rgba(10,6,3,.62))}
+.carousel__track{display:flex;height:100%;transition:transform 600ms cubic-bezier(.22,.61,.36,1);will-change:transform}
+.carousel__slide{position:relative;flex:0 0 100%;height:100%;overflow:hidden;margin:0}
+.carousel__slide::before{content:"";position:absolute;inset:-14%;background-image:var(--bg);background-size:cover;
+  background-position:center;filter:blur(36px) brightness(.42) saturate(1.15);transform:scale(1.14)}
+.carousel__slide img{position:relative;width:100%;height:100%;object-fit:contain;
+  -webkit-user-drag:none;user-select:none;pointer-events:none}
+.carousel__count{position:absolute;right:18px;top:16px;z-index:2;font-size:12px;letter-spacing:.14em;
+  color:var(--fg-2);font-variant-numeric:tabular-nums;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.carousel__btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:46px;height:46px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.25);background:rgba(18,12,7,.5);backdrop-filter:blur(8px);color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background var(--t),border-color var(--t)}
+.carousel__btn:hover{background:rgba(18,12,7,.82);border-color:var(--amber)}
+.carousel__btn svg{width:20px;height:20px}
+.carousel__btn--prev{left:14px}
+.carousel__btn--next{right:14px}
+.carousel__dots{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:3;display:flex;gap:8px;max-width:70%;flex-wrap:wrap;justify-content:center}
+.carousel__dot{width:8px;height:8px;border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:rgba(255,255,255,.35);transition:background var(--t),width var(--t)}
+.carousel__dot[aria-current="true"]{background:var(--amber);width:22px;border-radius:99px}
+
+/* бронирование */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.step{position:relative;border:1px solid var(--line);border-radius:18px;padding:26px 24px 24px;background:var(--surface)}
+.step::before{counter-increment:s;content:counter(s);font-family:"Cormorant Garamond",serif;font-weight:700;
+  font-size:2.2rem;color:var(--amber);opacity:.9;line-height:1}
+.step h3{font-size:1.35rem;margin:12px 0 8px}
+.step p{color:var(--fg-2);font-size:15.5px}
+
+/* контакты */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,5vw,60px);align-items:center;
+  border:1px solid var(--line);border-radius:24px;padding:clamp(28px,5vw,54px);
+  background:
+    radial-gradient(55% 110% at 100% 100%,rgba(157,185,138,.14),transparent 62%),
+    radial-gradient(55% 110% at 0 0,rgba(224,162,75,.12),transparent 58%),
+    var(--surface)}
+.contact h2{font-size:clamp(1.9rem,3.8vw,2.9rem);margin-bottom:14px}
+.crows{margin:24px 0 28px;display:grid;gap:14px}
+.crow{display:flex;gap:14px;align-items:flex-start;color:var(--fg-2)}
+.crow svg{width:20px;height:20px;color:var(--birch);flex:none;margin-top:2px}
+.crow b{color:var(--fg);font-weight:600}
+.crow a{text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px}
+.crow a:hover{text-decoration-color:var(--amber)}
+.contact__cta{display:flex;flex-wrap:wrap;gap:14px}
+.contact__map{position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  min-height:360px;height:100%;background:var(--surface-2)}
+.map-frame{width:100%;height:100%;min-height:360px;border:0;display:block}
+.map-link{position:absolute;left:14px;bottom:14px;z-index:2;background:rgba(18,12,7,.8);border:1px solid var(--line-2);
+  color:var(--fg);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;backdrop-filter:blur(6px);
+  display:inline-flex;align-items:center;gap:8px}
+.map-link:hover{border-color:var(--amber)}
+.map-link svg{width:15px;height:15px;color:var(--amber)}
+
+/* подвал */
+.foot{border-top:1px solid var(--line);padding-block:38px;margin-top:18px;color:var(--muted);font-size:14px}
+.foot__in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.foot a:hover{color:var(--fg)}
+
+/* адаптив */
+@media (max-width:1040px){
+  .facts{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr}
+}
+@media (max-width:960px){
+  .nav{display:none}
+  .header .btn span{display:none}
+  .logo__sub{display:none}
+  .logo__mark{font-size:23px}
+  .burger{display:flex}
+  .about{grid-template-columns:1fr}
+  .about__photo{aspect-ratio:16/12;order:-1}
+  .price-grid{grid-template-columns:1fr}
+  .contact{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .facts{grid-template-columns:1fr}
+  .carousel__viewport{aspect-ratio:3/4}
+  .carousel__btn{width:40px;height:40px}
+  .hero h1{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;scroll-behavior:auto}
+  .btn:hover,.price-card:hover{transform:none}
+  .carousel__track{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="atmos" aria-hidden="true"></div>
+<canvas class="steam" id="steam" aria-hidden="true"></canvas>
+
+<header class="header">
+  <div class="wrap header__in">
+    <a class="logo" href="#top" aria-label="Своя компания — на главную">
+      <span class="logo__mark">Своя компания</span>
+      <span class="logo__sub">баня · Снежинск</span>
+    </a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#about">О бане</a>
+      <a href="#price">Аренда</a>
+      <a href="#gallery">Фото</a>
+      <a href="#booking">Как забронировать</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <a class="btn btn--amber" href="https://vk.com/club228036968" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8l-4 4V5a1 1 0 0 1 1-1Z"/></svg>
+      <span>Написать в ВК</span>
+    </a>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mnav">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+<nav class="mnav" id="mnav" aria-label="Мобильное меню">
+  <a href="#about">О бане</a>
+  <a href="#price">Аренда</a>
+  <a href="#gallery">Фото</a>
+  <a href="#booking">Как забронировать</a>
+  <a href="#contact">Контакты</a>
+</nav>
+
+<main id="top">
+
+  <!-- ГЕРОЙ -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__veil" aria-hidden="true"></div>
+    <div class="wrap hero__in">
+      <span class="eyebrow">Баня в Снежинске · ул. Транспортная, 28</span>
+      <h1>Своя баня — для <em>своей компании</em></h1>
+      <p class="lead">Пар, жар и время, которое принадлежит только вам. Приходите с друзьями или семьёй — растопим и передадим баню в ваше распоряжение.</p>
+      <div class="hero__cta">
+        <a class="btn btn--amber" href="https://vk.com/club228036968" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8l-4 4V5a1 1 0 0 1 1-1Z"/></svg>
+          Забронировать в ВК
+        </a>
+        <span class="hero__chip"><b>1 500 ₽</b> / час · от 6 часов — 1 000 ₽</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- О БАНЕ -->
+  <section class="sec sec--top" id="about">
+    <div class="wrap">
+      <div class="about">
+        <div>
+          <span class="eyebrow">Своя компания</span>
+          <h2 style="margin-top:12px">Место, где собираются свои</h2>
+          <blockquote>«Хорошая баня — это когда пар, ковш воды и только те люди, с кем хорошо молчать и смеяться.»</blockquote>
+          <p class="lead" style="margin-top:22px">Баня «Своя компания» — в черте города, в Снежинске на Транспортной, 28. Никакой суеты: вы приходите, топите пар и проводите время так, как хочется именно вам.</p>
+          <div class="facts">
+            <div class="fact"><b>1 500 ₽</b><span>аренда бани за час</span></div>
+            <div class="fact"><b>1 000 ₽</b><span>за час при заказе от 6 часов</span></div>
+            <div class="fact"><b>В городе</b><span>Снежинск, Транспортная, 28</span></div>
+          </div>
+        </div>
+        <figure class="about__photo">
+          <img src="img/g3.jpg" alt="Баня «Своя компания»" loading="lazy" decoding="async">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <!-- ЦЕНЫ -->
+  <section class="sec" id="price">
+    <div class="wrap">
+      <div class="sec__head">
+        <div>
+          <span class="eyebrow">Аренда</span>
+          <h2 style="margin-top:10px">Платите за время</h2>
+        </div>
+        <p class="lead" style="max-width:36ch">Чем дольше заказываете — тем ниже цена за час. Идеально для большой компании.</p>
+      </div>
+      <div class="price-grid">
+        <article class="price-card">
+          <span class="price-card__tag">Стандарт</span>
+          <h3>Аренда за час</h3>
+          <div class="price-card__val">1 500 ₽<small> / час</small></div>
+          <p>Топите пар и отдыхайте столько, сколько нужно. Подходит для короткого визита вдвоём или небольшой компанией.</p>
+        </article>
+        <article class="price-card price-card--best">
+          <span class="price-card__tag">Выгодно · от 6 часов</span>
+          <h3>Долгий вечер</h3>
+          <div class="price-card__val">1 000 ₽<small> / час</small></div>
+          <p>Заказываете от 6 часов — и каждый час дешевле. Лучший вариант для дня рождения, друзей и долгих вечеров.</p>
+        </article>
+      </div>
+      <p class="note" style="margin-top:16px">Бронь — во ВКонтакте: напишите дату, время и сколько часов хотите. Подтвердим и оставим баню за вами.</p>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <!-- ГАЛЕРЕЯ -->
+  <section class="sec" id="gallery">
+    <div class="wrap">
+      <div class="sec__head">
+        <div>
+          <span class="eyebrow">Фото</span>
+          <h2 style="margin-top:10px">Как у нас внутри</h2>
+        </div>
+        <p class="lead" style="max-width:32ch">Фото листаются сами — или тяните вбок.</p>
+      </div>
+      <div class="carousel" id="carousel" role="region" aria-roledescription="карусель"
+           aria-label="Фотографии бани «Своя компания»" tabindex="0">
+        <div class="carousel__viewport">
+          <div class="carousel__track" id="track">
+            <figure class="carousel__slide" style="--bg:url('img/g1.jpg')"><img src="img/g1.jpg" alt="Баня «Своя компания» — фото 1" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g2.jpg')"><img src="img/g2.jpg" alt="Баня «Своя компания» — фото 2" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g3.jpg')"><img src="img/g3.jpg" alt="Баня «Своя компания» — фото 3" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g4.jpg')"><img src="img/g4.jpg" alt="Баня «Своя компания» — фото 4" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g5.jpg')"><img src="img/g5.jpg" alt="Баня «Своя компания» — фото 5" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g6.jpg')"><img src="img/g6.jpg" alt="Баня «Своя компания» — фото 6" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g7.jpg')"><img src="img/g7.jpg" alt="Баня «Своя компания» — фото 7" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g8.jpg')"><img src="img/g8.jpg" alt="Баня «Своя компания» — фото 8" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g9.jpg')"><img src="img/g9.jpg" alt="Баня «Своя компания» — фото 9" decoding="async"></figure>
+            <figure class="carousel__slide" style="--bg:url('img/g10.jpg')"><img src="img/g10.jpg" alt="Баня «Своя компания» — фото 10" decoding="async"></figure>
+          </div>
+          <button class="carousel__btn carousel__btn--prev" id="cPrev" type="button" aria-label="Предыдущее фото">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="carousel__btn carousel__btn--next" id="cNext" type="button" aria-label="Следующее фото">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <div class="carousel__dots" id="cDots" role="tablist" aria-label="Выбор фото"></div>
+          <div class="carousel__count" id="cCount">01 / 10</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="rule"></div></div>
+
+  <!-- КАК ЗАБРОНИРОВАТЬ -->
+  <section class="sec" id="booking">
+    <div class="wrap">
+      <div class="sec__head">
+        <div>
+          <span class="eyebrow">Бронь</span>
+          <h2 style="margin-top:10px">Как забронировать</h2>
+        </div>
+        <p class="lead" style="max-width:34ch">Всё через сообщения сообщества — быстро и без звонков.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Напишите во ВКонтакте</h3>
+          <p>Откройте сообщество «Своя компания» и напишите нам в личные сообщения.</p>
+        </div>
+        <div class="step">
+          <h3>Укажите дату и время</h3>
+          <p>Скажите, на какой день, во сколько и сколько часов хотите баню.</p>
+        </div>
+        <div class="step">
+          <h3>Мы подтвердим</h3>
+          <p>Ответим, свободно ли время, и займём баню под вашу компанию.</p>
+        </div>
+      </div>
+      <div style="margin-top:28px">
+        <a class="btn btn--amber" href="https://vk.com/club228036968" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8l-4 4V5a1 1 0 0 1 1-1Z"/></svg>
+          Написать в сообщество
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ -->
+  <section class="sec" id="contact">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <span class="eyebrow">Контакты</span>
+          <h2 style="margin-top:12px">Ждём вашу компанию</h2>
+          <p class="lead">Собираетесь к нам — напишите заранее, особенно на выходные: свободные вечера разбирают быстро.</p>
+          <div class="crows">
+            <div class="crow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.4-7-11a7 7 0 1 1 14 0c0 5.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              <span><b>Адрес:</b> г. Снежинск, ул. Транспортная, 28</span>
+            </div>
+            <div class="crow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.4 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2Z"/></svg>
+              <span><b>Бронь:</b> сообщения сообщества во ВКонтакте</span>
+            </div>
+            <div class="crow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8l-4 4V5a1 1 0 0 1 1-1Z"/></svg>
+              <span><b>ВКонтакте:</b> <a href="https://vk.com/club228036968" target="_blank" rel="noopener">vk.com/club228036968</a></span>
+            </div>
+          </div>
+          <div class="contact__cta">
+            <a class="btn btn--amber" href="https://vk.com/club228036968" target="_blank" rel="noopener">Написать во ВКонтакте</a>
+          </div>
+        </div>
+        <div class="contact__map">
+          <iframe class="map-frame" title="Баня «Своя компания» на карте — Транспортная, 28"
+            src="https://yandex.ru/map-widget/v1/?text=%D0%A1%D0%BD%D0%B5%D0%B6%D0%B8%D0%BD%D1%81%D0%BA%2C%20%D0%A2%D1%80%D0%B0%D0%BD%D1%81%D0%BF%D0%BE%D1%80%D1%82%D0%BD%D0%B0%D1%8F%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%2C%2028&z=17"
+            loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <a class="map-link" href="https://2gis.ru/snezhinsk/search/%D0%A2%D1%80%D0%B0%D0%BD%D1%81%D0%BF%D0%BE%D1%80%D1%82%D0%BD%D0%B0%D1%8F%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%2C%2028" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.4-7-11a7 7 0 1 1 14 0c0 5.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            Открыть в 2ГИС
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span>© <span id="year"></span> Баня «Своя компания» · Снежинск, ул. Транспортная, 28</span>
+    <span>Запись — <a href="https://vk.com/club228036968" target="_blank" rel="noopener">во ВКонтакте</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* меню */
+  var b = document.getElementById('burger'), m = document.getElementById('mnav');
+  if (b && m){
+    b.addEventListener('click', function(){
+      var open = m.hasAttribute('data-open');
+      if (open){ m.removeAttribute('data-open'); } else { m.setAttribute('data-open',''); }
+      b.setAttribute('aria-expanded', String(!open));
+    });
+    m.addEventListener('click', function(e){
+      if (e.target.tagName === 'A'){ m.removeAttribute('data-open'); b.setAttribute('aria-expanded','false'); }
+    });
+  }
+
+  /* лёгкий тёплый пар на фоне */
+  var steam = document.getElementById('steam');
+  if (steam && steam.getContext){
+    var sctx = steam.getContext('2d');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var sw = 0, sh = 0, parts = [], stime = 0, sprite = null;
+
+    (function(){
+      var s = 160, c = document.createElement('canvas');
+      c.width = c.height = s;
+      var x = c.getContext('2d');
+      var g = x.createRadialGradient(s/2, s/2, 0, s/2, s/2, s/2);
+      g.addColorStop(0, 'rgba(252,236,206,0.5)');
+      g.addColorStop(0.45, 'rgba(240,187,116,0.14)');
+      g.addColorStop(1, 'rgba(240,187,116,0)');
+      x.fillStyle = g; x.fillRect(0, 0, s, s); sprite = c;
+    })();
+
+    function mk(bottom){
+      return {
+        x: Math.random() * sw,
+        y: bottom ? sh + Math.random() * sh * 0.5 : Math.random() * sh,
+        r: 70 + Math.random() * 130,
+        a: 0.024 + Math.random() * 0.055,
+        vy: -(0.1 + Math.random() * 0.3),
+        sway: 0.15 + Math.random() * 0.4,
+        drift: (Math.random() - 0.5) * 0.14,
+        seed: Math.random() * Math.PI * 2
+      };
+    }
+    function resize(){
+      sw = steam.clientWidth; sh = steam.clientHeight;
+      steam.width = Math.max(1, Math.round(sw * dpr));
+      steam.height = Math.max(1, Math.round(sh * dpr));
+      sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(22, Math.min(60, Math.round(sw / 26)));
+      parts = [];
+      for (var i = 0; i < n; i++) parts.push(mk(false));
+    }
+    function frame(){
+      stime += 16;
+      sctx.clearRect(0, 0, sw, sh);
+      sctx.globalCompositeOperation = 'lighter';
+      for (var i = 0; i < parts.length; i++){
+        var p = parts[i];
+        p.y += p.vy;
+        p.x += Math.sin(stime * 0.0006 + p.seed) * p.sway + p.drift;
+        if (p.y + p.r < 0){ parts[i] = mk(true); continue; }
+        sctx.globalAlpha = Math.max(0, p.a);
+        sctx.drawImage(sprite, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+      }
+      sctx.globalAlpha = 1;
+      if (!reduce) requestAnimationFrame(frame);
+    }
+    resize(); frame();
+    window.addEventListener('resize', function(){ resize(); if (reduce) frame(); });
+  }
+
+  /* карусель */
+  var car = document.getElementById('carousel');
+  if (!car) return;
+  var track = document.getElementById('track');
+  var slides = Array.prototype.slice.call(track.children);
+  var dotsWrap = document.getElementById('cDots');
+  var count = document.getElementById('cCount');
+  var reduceCar = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var i = 0, timer = null;
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  slides.forEach(function(_, idx){
+    var d = document.createElement('button');
+    d.type = 'button'; d.className = 'carousel__dot';
+    d.setAttribute('aria-label', 'Фото ' + (idx + 1));
+    d.addEventListener('click', function(){ go(idx); play(); });
+    dotsWrap.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function render(){
+    track.style.transform = 'translateX(' + (-i * 100) + '%)';
+    dots.forEach(function(d, idx){ d.setAttribute('aria-current', String(idx === i)); });
+    slides.forEach(function(s, idx){ s.setAttribute('aria-hidden', String(idx !== i)); });
+    if (count) count.textContent = pad(i + 1) + ' / ' + pad(slides.length);
+  }
+  function go(n){ i = (n % slides.length + slides.length) % slides.length; render(); }
+  function nextS(){ go(i + 1); }
+  function prevS(){ go(i - 1); }
+  function stop(){ if (timer){ clearInterval(timer); timer = null; } }
+  function play(){ if (reduceCar) return; stop(); timer = setInterval(nextS, 4800); }
+
+  document.getElementById('cNext').addEventListener('click', function(){ nextS(); play(); });
+  document.getElementById('cPrev').addEventListener('click', function(){ prevS(); play(); });
+  car.addEventListener('mouseenter', stop);
+  car.addEventListener('mouseleave', play);
+  car.addEventListener('focusin', stop);
+  car.addEventListener('focusout', play);
+  document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : play(); });
+  car.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowLeft'){ prevS(); play(); }
+    else if (e.key === 'ArrowRight'){ nextS(); play(); }
+  });
+
+  var startX = 0, dx = 0, dragging = false, width = 1;
+  function down(x){ dragging = true; startX = x; dx = 0; width = car.clientWidth || 1; stop(); track.style.transition = 'none'; }
+  function move(x){ if (!dragging) return; dx = x - startX; track.style.transform = 'translateX(calc(' + (-i * 100) + '% + ' + dx + 'px))'; }
+  function up(){
+    if (!dragging) return;
+    dragging = false; track.style.transition = '';
+    if (Math.abs(dx) > width * 0.15){ dx < 0 ? nextS() : prevS(); } else { render(); }
+    play();
+  }
+  car.addEventListener('touchstart', function(e){ down(e.touches[0].clientX); }, {passive:true});
+  car.addEventListener('touchmove', function(e){ move(e.touches[0].clientX); }, {passive:true});
+  car.addEventListener('touchend', up);
+  car.addEventListener('mousedown', function(e){ e.preventDefault(); down(e.clientX); });
+  window.addEventListener('mousemove', function(e){ move(e.clientX); });
+  window.addEventListener('mouseup', up);
+
+  render(); play();
+})();
+</script>
+</body>
+</html>
